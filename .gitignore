@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+journal.json
+widget.json
+journal.before*.json
+*.tmp
