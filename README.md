@@ -10,11 +10,11 @@ Research Diary runs on Linux and saves entries locally as you type. You can revi
 
 ## Why I built Research Diary
 
-AI helps me review papers and try analyses faster. Some days end with a long trail of answers and drafts, and I still feel drained and less connected to the question I started with.
+AI helps me review papers and try analyses faster. Some days I finish with a screen full of answers and drafts and feel worn out. The question I started with can feel a long way off.
 
-*Trend Korea 2027* describes **권태사회** (“Age of Ennui Society”) as a paradox of abundance. Even when our days are busy and full of stimulation, it can be hard to find something that holds our interest or feels meaningful. I recognize that feeling in AI-assisted research. As the output piles up, I need a moment to ask what I actually learned and what still needs checking. [Book excerpt, p. 144](https://m.yes24.com/goods/detail/195842609) · [Kim Nan-do’s launch remarks](https://www.yna.co.kr/view/AKR20260930110700005)
+The chapter on **권태사회** (“Age of Ennui Society”) in *Trend Korea 2027* describes how a busy day can still feel dull. Having little to do is one source of boredom. The chapter focuses on boredom that can come from too much stimulation. You might already be watching a show and still be looking for something more interesting. A day full of activity can leave little time to get absorbed in any one thing. [Book excerpt, p. 144](https://m.yes24.com/goods/detail/195842609) · [Book launch coverage](https://www.yna.co.kr/view/AKR20260930110700005) · [Examples discussed at the launch](https://www.dailian.co.kr/news/view/1696181)
 
-I built this widget for researchers who recognize that feeling. A few lines at the end of the day can capture what you tried, what the evidence showed, why you made a decision, and where to pick up tomorrow.
+I built this widget for researchers who have days like that. I wanted a place to write down what I tried, what I checked for myself, and why I made a decision. An open question at the end of the entry gives me somewhere to start tomorrow.
 
 ## Quick start
 
@@ -50,7 +50,7 @@ python3 journal_today.py --date 2026-01-15 --write "Reviewed the experiment and 
 
 The helper appends your text to the selected date. The widget checks for updates to the journal file about every two seconds. The installed helper is at `~/.local/share/journal-widget/journal_today.py`.
 
-Running the helper without `--write` prints a short preview of matching local Codex and Claude Code JSONL records. Preview mode reads a bounded portion of each file and limits the number and length of excerpts. It generates excerpts for review, and you supply the journal text yourself.
+Run the helper without `--write` to preview matching local Codex and Claude Code JSONL records. It reads part of each file and limits how many messages it shows and how much of each it prints. Use `--write` to save the entry you write.
 
 ## Storage and backup
 
