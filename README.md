@@ -12,7 +12,7 @@ Research Diary runs on Windows, macOS, and Linux. The desktop widget saves entri
 
 AI helps me review papers and try analyses faster. Some days I finish with a screen full of answers and drafts and feel worn out. The question I started with can feel a long way off.
 
-The chapter on **권태사회** (“Age of Ennui Society”) in *Trend Korea 2027* describes how a busy day can still feel dull. Having little to do is one source of boredom. The chapter focuses on boredom that can come from too much stimulation. You might already be watching a show and still be looking for something more interesting. A day full of activity can leave little time to get absorbed in any one thing. [Book excerpt, p. 144](https://m.yes24.com/goods/detail/195842609) · [Book launch coverage](https://www.yna.co.kr/view/AKR20260930110700005) · [Examples discussed at the launch](https://www.dailian.co.kr/news/view/1696181)
+The chapter on **권태사회** (“Age of Ennui Society”) in *Trend Korea 2027* describes how a busy day can still feel dull. Having little to do is one source of boredom. The chapter focuses on boredom that can come from too much stimulation. You might already be watching a show and still be looking for something more interesting. A day full of activity can leave little time to get absorbed in any one thing.
 
 I built this widget for researchers who have days like that. I wanted a place to bring together what I tried with each agent, what I checked for myself, and why I made a decision. The next morning I can open the previous entry and pick up a question I left there.
 
