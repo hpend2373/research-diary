@@ -46,8 +46,11 @@ def open_log(path):
             if process.wait():
                 raise OSError("zstd could not decompress the archive")
     else:
-        with zstd.open(path, "rt", encoding="utf-8", errors="replace") as stream:
-            yield stream
+        try:
+            with zstd.open(path, "rt", encoding="utf-8", errors="replace") as stream:
+                yield stream
+        except zstd.ZstdError as exc:
+            raise OSError("could not decompress the archive") from exc
 
 
 def tail_lines(path):

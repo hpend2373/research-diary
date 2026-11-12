@@ -58,6 +58,8 @@ def main():
             compressed = subprocess.check_output(["zstd", "-q", "-c", "--", str(codex_file)])
             codex_file.with_suffix(".jsonl.zst").write_bytes(compressed)
             codex_file.unlink()
+        broken_archive = codex_file.with_name("rollout-damaged.jsonl.zst")
+        broken_archive.write_bytes(b"damaged zstd archive")
 
         write_jsonl(
             claude / "projects" / "research" / "session.jsonl",
@@ -80,6 +82,7 @@ def main():
         assert text.count(codex_reply) == 1, text
         assert "Check the method." in text and "Claude found a limitation." in text
         assert "Different day marker." not in text
+        assert "Files skipped or unreadable:" in text and broken_archive.name in text
 
         note = home / "summary.txt"
         note.write_text("분석과 문헌 검토를 종합했다.\n다음 할 일: 한계 확인.", encoding="utf-8-sig")
