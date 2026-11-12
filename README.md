@@ -8,6 +8,14 @@ Write a daily record of your research. Each dated entry gives you space for what
 
 Research Diary runs on Linux and saves entries locally as you type. You can revisit past entries and export your diary to Markdown.
 
+## Why I built Research Diary
+
+AI helps me review papers and try analyses faster. Some days end with a long trail of answers and drafts, and I still feel drained and less connected to the question I started with.
+
+*Trend Korea 2027* describes **권태사회** (“Age of Ennui Society”) as a paradox of abundance. Even when our days are busy and full of stimulation, it can be hard to find something that holds our interest or feels meaningful. I recognize that feeling in AI-assisted research. As the output piles up, I need a moment to ask what I actually learned and what still needs checking. [Book excerpt, p. 144](https://m.yes24.com/goods/detail/195842609) · [Kim Nan-do’s launch remarks](https://www.yna.co.kr/view/AKR20260930110700005)
+
+I built this widget for researchers who recognize that feeling. A few lines at the end of the day can capture what you tried, what the evidence showed, why you made a decision, and where to pick up tomorrow.
+
 ## Quick start
 
 Install Python 3 and Tkinter. On Ubuntu or Debian:
