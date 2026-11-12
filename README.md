@@ -1,8 +1,12 @@
-# Research Journal Widget
+# Research Diary
 
 [English](README.md) · [한국어](README.ko.md)
 
-A small Linux desktop widget for daily research notes. Write in a dated entry, browse past notes, and export your journal to Markdown. The app stores entries locally in JSON.
+Write a daily record of your research. Each dated entry gives you space for what you did, what you observed, what remains unresolved, and what to do next.
+
+![A researcher writing at a desk with a laptop and an open notebook](assets/research-diary-cover.jpg)
+
+Research Diary runs on Linux and saves entries locally as you type. You can revisit past entries and export your diary to Markdown.
 
 ## Quick start
 
