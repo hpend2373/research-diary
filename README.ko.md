@@ -14,8 +14,8 @@ Python 3와 Tkinter가 필요합니다. Ubuntu 또는 Debian에서는 아래 명
 
 ```sh
 sudo apt install python3-tk
-git clone https://github.com/hpend2373/research-journal-widget.git
-cd research-journal-widget
+git clone https://github.com/hpend2373/research-diary.git
+cd research-diary
 python3 journal_widget.py
 ```
 

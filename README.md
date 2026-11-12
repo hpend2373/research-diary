@@ -14,8 +14,8 @@ Install Python 3 and Tkinter. On Ubuntu or Debian:
 
 ```sh
 sudo apt install python3-tk
-git clone https://github.com/hpend2373/research-journal-widget.git
-cd research-journal-widget
+git clone https://github.com/hpend2373/research-diary.git
+cd research-diary
 python3 journal_widget.py
 ```
 
