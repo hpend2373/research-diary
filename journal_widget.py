@@ -12,20 +12,13 @@
 """
 
 import sys, os, json, datetime, tempfile, shutil, subprocess
+from journal_paths import journal_directory
 
 APP_NAME    = "Research Journal"
 APP_VERSION = "3.6.0"
 FRAME_FIX   = 1   # 입력 불가 설정을 한 번 되돌리기 위한 표식
 
-def _docs():
-    home = os.path.expanduser("~")
-    for name in ("Documents", "문서"):
-        p = os.path.join(home, name)
-        if os.path.isdir(p):
-            return os.path.join(p, "연구일지")
-    return os.path.join(home, "Documents", "연구일지")
-
-DATA_DIR    = _docs()
+DATA_DIR    = os.fspath(journal_directory())
 DATA_FILE   = os.path.join(DATA_DIR, "journal.json")
 CONFIG_FILE = os.path.join(DATA_DIR, "widget.json")
 
@@ -164,6 +157,8 @@ def day_name(k):
 class Widget:
     def __init__(self, root):
         self.root = root
+        self.window_system = root.tk.call("tk", "windowingsystem")
+        self.shortcut = "Command" if self.window_system == "aqua" else "Ctrl"
         os.makedirs(DATA_DIR, exist_ok=True)
         self.notes   = read_json(DATA_FILE, {})
         self.config  = read_json(CONFIG_FILE, {})
@@ -282,6 +277,10 @@ class Widget:
     # ── 구조 ─────────────────────────────────────────────────────────
     def _build(self):
         r = self.root
+        move_cursor, resize_cursor = {
+            "aqua": ("openhand", "resizebottomright"),
+            "win32": ("fleur", "size_nw_se"),
+        }.get(self.window_system, ("fleur", "bottom_right_corner"))
         # 헤어라인 1px — apple 은 테두리 대신 이 선 하나로 면을 나눈다
         self.border = tk.Frame(r)
         self.border.pack(fill="both", expand=True)
@@ -296,9 +295,9 @@ class Widget:
         self.head.pack(fill="x")
 
         left = tk.Frame(self.head); left.pack(side="left")
-        self.lbl_date = tk.Label(left, font=self.f_date, anchor="w", cursor="fleur")
+        self.lbl_date = tk.Label(left, font=self.f_date, anchor="w", cursor=move_cursor)
         self.lbl_date.pack(side="top", anchor="w")
-        self.lbl_sub = tk.Label(left, font=self.f_sub, anchor="w", cursor="fleur")
+        self.lbl_sub = tk.Label(left, font=self.f_sub, anchor="w", cursor=move_cursor)
         self.lbl_sub.pack(side="top", anchor="w")
         self.head_box = left
 
@@ -329,7 +328,7 @@ class Widget:
         self.status.pack(side="left")
 
         self.grip = tk.Label(self.foot, bd=0, highlightthickness=0,
-                             cursor="bottom_right_corner")
+                             cursor=resize_cursor)
         self.grip.pack(side="right", padx=(SP_SM, 0))
         self.dots = {}
         box = tk.Frame(self.foot); box.pack(side="right")
@@ -370,7 +369,7 @@ class Widget:
         self.menu.add_command(label="Toggle window frame",
                               command=self.toggle_frame)
         self.menu.add_separator()
-        self.menu.add_command(label="Copy entry            Ctrl+Shift+C",
+        self.menu.add_command(label="Copy entry", accelerator=f"{self.shortcut}+Shift+C",
                               command=lambda: self.copy_note(False))
         self.menu.add_command(label="Copy entry with date",
                               command=lambda: self.copy_note(True))
@@ -394,12 +393,17 @@ class Widget:
         self.menu.add_command(label="Help", command=self.help)
         self.menu.add_command(label="Quit", command=self.quit)
         self.root.bind("<Button-3>", self.popup)
-        self.root.bind("<Control-s>", lambda e: self.save(manual=True))
-        self.root.bind("<Control-d>", lambda e: self.toggle_mode())
-        self.root.bind("<Control-b>", lambda e: self.toggle_frame())
-        # Ctrl+C 는 Text 의 '선택 영역 복사'로 남겨 둔다
-        self.root.bind("<Control-Shift-C>", lambda e: self.copy_note(False))
-        self.root.bind("<Control-Shift-c>", lambda e: self.copy_note(False))
+        modifiers = ("Control",)
+        if self.window_system == "aqua":
+            self.root.bind("<Button-2>", self.popup)
+            self.root.bind("<Control-Button-1>", self.popup)
+            modifiers += ("Command",)
+        for modifier in modifiers:
+            self.root.bind(f"<{modifier}-s>", lambda e: self.save(manual=True))
+            self.root.bind(f"<{modifier}-d>", lambda e: self.toggle_mode())
+            self.root.bind(f"<{modifier}-b>", lambda e: self.toggle_frame())
+            self.root.bind(f"<{modifier}-Shift-C>", lambda e: self.copy_note(False))
+            self.root.bind(f"<{modifier}-Shift-c>", lambda e: self.copy_note(False))
 
     def popup(self, event):
         try:
@@ -535,21 +539,14 @@ class Widget:
 
     # ── 복사 ─────────────────────────────────────────────────────────
     def to_clipboard(self, text):
-        """Tk 클립보드에 넣고, 가능하면 외부 도구로도 넘긴다.
-        Tk 는 프로그램이 살아 있는 동안만 클립보드 주인이라, 위젯을 닫으면
-        내용이 사라진다. xclip/wl-copy 를 거치면 닫은 뒤에도 남는다."""
-        ok = False
-        try:
-            self.root.clipboard_clear()
-            self.root.clipboard_append(text)
-            self.root.update_idletasks()
-            ok = True
-        except tk.TclError:
-            pass
-
-        wayland = bool(os.environ.get("WAYLAND_DISPLAY"))
-        x11 = [["xclip", "-selection", "clipboard"], ["xsel", "--clipboard", "--input"]]
-        cands = ([["wl-copy"]] + x11) if wayland else (x11 + [["wl-copy"]])
+        """Use a system clipboard helper when available, with Tk as fallback."""
+        cands = []
+        if self.window_system == "aqua":
+            cands = [["pbcopy"]]
+        elif self.window_system == "x11":
+            x11 = [["xclip", "-selection", "clipboard"], ["xsel", "--clipboard", "--input"]]
+            wayland = [["wl-copy"]]
+            cands = wayland + x11 if os.environ.get("WAYLAND_DISPLAY") else x11 + wayland
         for cmd in cands:
             if not shutil.which(cmd[0]):
                 continue
@@ -558,9 +555,15 @@ class Widget:
                                timeout=3, check=True,
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 return True
-            except Exception:
+            except (OSError, subprocess.SubprocessError):
                 continue
-        return ok
+        try:
+            self.root.clipboard_clear()
+            self.root.clipboard_append(text)
+            self.root.update_idletasks()
+            return True
+        except tk.TclError:
+            return False
 
     def copy_note(self, with_date=False):
         self.save(silent=True)
@@ -763,10 +766,10 @@ class Widget:
         messagebox.showinfo(
             APP_NAME,
             "Drag the date to move the widget. Drag the lower-right handle to resize it.\n"
-            "Edits save after 0.8 seconds. Ctrl+S saves immediately.\n"
+            f"Edits save after 0.8 seconds. {self.shortcut}+S saves immediately.\n"
             "Use ‹ and › to browse dates. Click ⋯ or right-click to open the menu.\n"
-            "Use ⧉ or Ctrl+Shift+C to copy the current entry.\n"
-            "Ctrl+D switches the theme. Ctrl+B toggles the window frame.\n"
+            f"Use ⧉ or {self.shortcut}+Shift+C to copy the current entry.\n"
+            f"{self.shortcut}+D switches the theme. {self.shortcut}+B toggles the window frame.\n"
             "If typing fails in frameless mode, double-click the date to restore the frame.\n"
             "Use the colored dots to tag entries and the top dot to change window stacking.\n\n"
             "Journal file\n%s" % DATA_FILE)

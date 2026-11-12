@@ -16,7 +16,7 @@ if ! python3 "$src/journal_widget.py" --selftest >/dev/null 2>&1; then
 fi
 
 mkdir -p "$app" "$bin" "$desktop" "$icons"
-install -m 644 "$src/journal_widget.py" "$src/journal_today.py" "$app/"
+install -m 644 "$src/journal_widget.py" "$src/journal_today.py" "$src/journal_paths.py" "$app/"
 install -m 644 "$src/journal-widget.png" "$icons/journal-widget.png"
 
 {
