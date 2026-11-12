@@ -4,7 +4,7 @@
 
 Write a daily record of your research. Each dated entry gives you space for what you did, what you observed, what remains unresolved, and what to do next.
 
-![A researcher writing at a desk with a laptop and an open notebook](assets/research-diary-cover.jpg)
+![research diary — a bear in a blue tie writing research notes beside a laptop and a stack of papers](assets/research-diary-cover.jpg)
 
 Research Diary runs on Linux and saves entries locally as you type. You can revisit past entries and export your diary to Markdown.
 

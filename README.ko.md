@@ -4,7 +4,7 @@
 
 오늘 한 연구를 날짜별로 기록하세요. 한 일, 결과와 관찰, 남은 한계, 다음 할 일을 한곳에 정리할 수 있습니다.
 
-![노트북과 펼친 공책을 놓고 연구일지를 쓰는 모습](assets/research-diary-cover.jpg)
+![research diary — 파란 넥타이를 맨 곰이 노트북과 연구 자료 옆에서 일지를 쓰는 모습](assets/research-diary-cover.jpg)
 
 Linux 바탕화면에서 글을 쓰면 컴퓨터에 자동 저장됩니다. 지난 일지를 다시 열거나 전체 기록을 Markdown으로 내보낼 수 있습니다.
 
